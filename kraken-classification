@@ -1,0 +1,11 @@
+#!/bin/bash
+#PBS -l walltime=5:00:00,nodes=1:ppn=20,mem=101gb
+#PBS -N kraken-classify-standard
+#PBS -j oe
+#PBS -m ae -M gmg302@nyu.edu
+module load kraken/intel/0.10.6
+module load jellyfish/intel/1.1.11
+cd  $PBS_O_WORKDIR
+kraken --preload --fastq-input --paired --threads 20 --bzip2-compressed --db /scratch/at120/db/kraken/standard $nwfastq.r1.fastq.bz2 $nwfastq.r2.fastq.bz2 > $nwfastq.kraken.out
+kraken-mpa-report --db /scratch/at120/db/kraken/standard $nwfastq.kraken.out > $nwfastq.kraken-mpa.tsv
+exit 0;
